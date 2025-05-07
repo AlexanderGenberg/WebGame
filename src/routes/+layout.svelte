@@ -31,9 +31,10 @@
 		<a href="{base}/">Hem</a>
 		<a href="{base}/game">Spela</a>
 		<a href="{base}/about">Om oss</a>
+		<a href="{base}/devblog">Devblog</a>
 	</nav>
     <h1>Samurai på webben</h1>
-	<p>Highscore : {highscore}. 96 pixlar i höjd inkluderat med ground</p>
+	<p>Highscore : {highscore}. -432px och -336px</p>
 </header>
 
 <style>
@@ -42,8 +43,8 @@
 		grid-template-columns: repeat(3, 1fr);
 		justify-content: space-around;
 		align-items: center;
-		background-color: blue;
-		height: 8vh;
+		background-color: burlywood;
+		height: 64px;
 		border-bottom: black 8px solid;
 		padding: 10px;
     }

@@ -1,0 +1,22 @@
+---
+title: "Devblog 2"
+date: "2025-05-07"
+---
+
+# Storleks kontroll
+
+## Pressarna
+
+Jag har haft mycket problem med att ändra storleken på allt och göra så att pressarna stannar vid en viss 
+pungt beroende på höjden av spel rutan. Jag tror att jag först försökte använda mig av styling för att göra
+det men i slutända behövde jag kombinera styling med css och javascript. För att kunna sätta rätt position 
+behövde jag veta varifrån spel rutan började och sedan därfrån kunna sätta en viss andel av spelrutan som 
+jag ville att pressarna skulle stanna på.
+
+## Spelaren
+
+För att ändra spelarens storlek anävnde jag mig av förhållandet mellan hela rutans bredd genom spelrutans
+bred.
+
+<hr>
+<br>

@@ -1,0 +1,15 @@
+---
+title: "Devblog 1"
+date: "2025-04-01"
+---
+
+# Starten
+
+Jag har kommit igång och har gjort spritsen till spelet samt spelarens rörelse och pressarnas rörelse.
+Det nästa jag har velat göra är kollisionen mellan pressarna och spelaren men det har varit klurigt då 
+jag får ett dåligt värde på deras position och jag borde fixa det bättre om jag också vill ha styles 
+för olika enheter/skärmstorlekar.
+
+
+<hr>
+<br>
