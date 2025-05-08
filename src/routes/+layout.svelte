@@ -37,6 +37,8 @@
 	<p>Highscore : {highscore}. -432px och -336px</p>
 </header>
 
+<slot></slot>
+
 <style>
 	header {
         display: grid;
