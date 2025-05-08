@@ -33,11 +33,9 @@
 		<a href="{base}/about">Om oss</a>
 		<a href="{base}/devblog">Devblog</a>
 	</nav>
-    <h1>Samurai på webben</h1>
+	<h1>Samurai på webben</h1>
 	<p>Highscore : {highscore}. -432px och -336px</p>
 </header>
-
-<slot></slot>
 
 <style>
 	header {
