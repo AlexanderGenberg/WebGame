@@ -11,6 +11,8 @@
 
     let playerImages = []
     let player = {x:100, vxl:0, vxr:0, speed:4, health:5, states: ["Green", "Yellow", "Orange", "Red"], state: "Green", image: 0}
+    let playerSizeX
+    let playerY
 
     let presses = [{pressPos: 0, Bottom: 640}, {pressPos: 1, Bottom: 640}, {pressPos: 2, Bottom: 640}]
     let pressIsDown = 1
@@ -60,6 +62,8 @@
     }
 
     function updateMovment() {
+        playerSizeX = window.getComputedStyle(document.getElementById("player")).getPropertyValue("width").slice(0, -2)
+        playerY = Number(window.getComputedStyle(document.getElementById("player")).getPropertyValue("bottom").slice(0, -2))
         if (player.x <= 0) player.x = 0
         else player.x += player.vxr - player.vxl
 
@@ -72,22 +76,22 @@
     // Player take damage
 
     function checkIfDamage() {
-        let playerElement = window.getComputedStyle(document.getElementById("player"))
-        let pressSizeX = 512
-        let playerSizeX = 96
-
-        for(let press of presses) {
-            let pressElement = window.getComputedStyle(document.getElementById("press" + (press.pressPos)))
-
-            if (playerElement.getPropertyValue("left") < ((press.pressPos) * (window.innerWidth/3)) && 
-                (playerElement.getPropertyValue("left")+playerSizeX) > ((press.pressPos) *  ((window.innerWidth/3) + pressSizeX))) {
-                    console.log("dead")
+        for (let press of presses) {
+            let pressSizeX = Number(window.getComputedStyle(document.getElementById("press"+press.pressPos.toString())).getPropertyValue("width").slice(0, -2))
+            let pressY = Number(window.getComputedStyle(document.getElementById("press"+press.pressPos.toString())).getPropertyValue("bottom").slice(0, -2))
+            console.log(pressY, playerY+Number(playerSizeX))
+            if (
+                player.x < press.pressPos*pressSizeX + pressSizeX &&
+                player.x + playerSizeX > press.pressPos*pressSizeX &&
+                playerY + playerSizeX > pressY) {
+                console.log("Dead")
             }
         }
         requestAnimationFrame(checkIfDamage)
     }
 
-    onMount(()=>{updateMovment(); checkIfDamage()})
+
+    onMount(()=>{updateMovment(); changePress();setInterval(changePress, 2500); checkIfDamage(); })
 
     // Player animation
 
@@ -106,7 +110,7 @@
         windowHeight = window.innerHeight - 64
         fromBottom = windowHeight - backGroundHeight
 
-        pressIsDown = Math.round(Math.random()*2)
+        pressIsDown = Math.round(Math.random()*presses.length)
         for (let press of presses) {
             if (press.pressPos == pressIsDown) {press.Bottom = fromBottom + backGroundHeight/9+2}
             else {press.Bottom = fromBottom + backGroundHeight*0.7}
@@ -115,7 +119,6 @@
         presses = [...presses]
     }
 
-    setInterval(changePress, 2500)
 
     // Startup
 
@@ -193,8 +196,6 @@
 
     .countDown {
         position:absolute;
-
-
     }
 
     @media (max-width: 768px) {

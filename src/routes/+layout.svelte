@@ -34,7 +34,7 @@
 		<a href="{base}/devblog">Devblog</a>
 	</nav>
 	<h1>Samurai på webben</h1>
-	<p>Highscore : {highscore}. -432px och -336px</p>
+	<p>Highscore : {highscore}</p>
 </header>
 
 <style>
