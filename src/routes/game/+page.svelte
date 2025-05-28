@@ -17,7 +17,7 @@
     let playerSizeX
     let playerY
     let dmgAvalable = true
-    let playerStrech = false
+    let dmgTaken = false
 
     let presses = [{pressPos: 0, Bottom: 640}, {pressPos: 1, Bottom: 640}, {pressPos: 2, Bottom: 640}]
     let pressIsDown = 1
@@ -100,9 +100,10 @@
     function takeDmg() {
         if (player.health > 0 && dmgAvalable == true) {
             dmgAvalable = false
-            playerStrech = true
+            dmgTaken = true
             player.health -= 1
-            setTimeout(() => (dmgAvalable = true, playerStrech = false), 2000)
+            setTimeout(() => (dmgAvalable = true), 2000)
+            setTimeout(() => (dmgTaken = false), 1000)
         }
 
         else if (player.health == 0) {
@@ -185,11 +186,11 @@
         const bulletElements = document.querySelectorAll('.bullet')
         const objectElements = document.querySelectorAll('.object')
 
-        for (let bulletIndex = bullets.length - 1; bulletIndex >= 0; bulletIndex--) {
+        for (let bulletIndex = bullets.length - 1; bulletIndex >= 0; bulletIndex -= 1) {
             const bulletEl = bulletElements[bulletIndex]
             const bulletRect = bulletEl.getBoundingClientRect()
 
-            for (let objectIndex = flyingObjects.length - 1; objectIndex >= 0; objectIndex--) {
+            for (let objectIndex = flyingObjects.length - 1; objectIndex >= 0; objectIndex -= 1) {
                 const objectEl = objectElements[objectIndex]
                 const objectRect = objectEl.getBoundingClientRect()
 
@@ -202,7 +203,6 @@
                     gameover == false
                 ) {
                     poang += 1
-                    bullets.splice(bulletIndex, 1)
                     flyingObjects.splice(objectIndex, 1)
                     break
                 }
@@ -224,7 +224,7 @@
                 <img src="{pressImage}" alt="press" id="press{press.pressPos}"class="press" class:active = {press.pressPos == pressIsDown} style="bottom:{press.Bottom}px; left:{(press.pressPos/3)*100}%; width:{100/3}vw;">
             {/each}
         </div>
-        <img src="assets/player/player{player.state + player.image}.png" alt="player" id="player" style="left:{player.x}px; bottom:{fromBottom + backGroundHeight/9}px; width:{80*backGroundHeight/762}px; height:{80*backGroundHeight/762}px;" class:strech = {playerStrech == true}>
+        <img src="assets/player/player{player.state + player.image}.png" alt="player" id="player" style="left:{player.x}px; bottom:{fromBottom + backGroundHeight/9}px; width:{80*backGroundHeight/762}px; height:{80*backGroundHeight/762}px;" class:dmgTaken={dmgTaken}>
 
         <div>
             {#each flyingObjects as object}

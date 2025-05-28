@@ -3,7 +3,7 @@ title: "Devblog 3"
 date: "2025-05-14"
 ---
 
-# Fortsättning på att spelaren ska ta skada
+# kossision, skott och objekt
 
 ## kollsion med spelaren
 
@@ -14,7 +14,14 @@ kunna se och skriva ned hur kollisionenrna ska ske.
 ## Objeckten som flyger
 
 Jag har också fixat så att objekten spawnas in genom att göra en lista med object som är objekten.
-Jag ville göra en animation 
+Jag ville göra en animation för alla objekten som är på skärmen men det första jag gjorde fungerade
+inte så jag kollade på denna "" och då var det bara några få ändrangar skom skillde sig.
+
+## Skott och skjutning
+
+Skotten är typs samma som med objekten och jag har gjort en lista med alla skott i och sedan rita ut de.
+Jag la till att när mellanslag trycks ned så skjuts ett skott och det la jag till i samma funktion som 
+ger movment inputsen till spelaren.
 
 <hr>
 <br>

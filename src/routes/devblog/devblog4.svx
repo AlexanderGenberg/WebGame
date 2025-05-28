@@ -5,16 +5,23 @@ date: "2025-05-28"
 
 # Fortsättning på att spelaren ska ta skada
 
-## Hur det går
+## Skottens rörelse
 
-Jag har nu försökt med att få in alla siffror och det har gått hyfsat bra men det kan 
-bli bättre struktur och så att det fungerar. Det fungerar dock inte än och jag håller
-på att gå igenom alla variablar för att se vart det inte fungerar som jag vill att det ska.
+Jag har gjort en animation som börjar vid spelarens y kordinat och slutar över skärmens vy
+och efter animationen är slut tas objektet bort objektet från listan med hjälp av animationed 
+i html koden.
 
-## Fortsättning
+## Skottens kollision med objekten
 
-Jag måste verkligen fixa att spelaren tar skada innan jag fortsätter med att spelaren ska 
-kunna skjuta ned objekt.
+Jag använde mig av samma strategi som när jag fick hjälp av Lisa och då gick det att få kollision.
+När jag hade ritat ut och fått hur if satsen ska se ut så tog jag in alla värden från alla skott 
+och objekt med forloopar och satte de i ifsatsen. Efter det skrev jag det jag ville skulle göras 
+och det var att ge poäng samt ta bort det objektet.
+
+## Tutorial / startskärm
+
+Det gick ganska fort att göra detta för det var inget komplicerat. Jag ville dock göra så att ett
+highscore skulle sparas med svelte store men jag lyckades inte med det.
 
 <hr>
 <br>
