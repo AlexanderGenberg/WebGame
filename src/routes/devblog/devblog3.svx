@@ -5,16 +5,16 @@ date: "2025-05-14"
 
 # Fortsättning på att spelaren ska ta skada
 
-## Hur det går
+## kollsion med spelaren
 
-Jag har nu försökt med att få in alla siffror och det har gått hyfsat bra men det kan 
-bli bättre struktur och så att det fungerar. Det fungerar dock inte än och jag håller
-på att gå igenom alla variablar för att se vart det inte fungerar som jag vill att det ska.
+Jag har försökt med att få in alla siffror men det fungerade inte som ja ville i början
+Dock med hjälp av Lisas hjälp så blev det rätt tillslut genom att hon ritade en bild och på det sättet
+kunna se och skriva ned hur kollisionenrna ska ske.
 
-## Fortsättning
+## Objeckten som flyger
 
-Jag måste verkligen fixa att spelaren tar skada innan jag fortsätter med att spelaren ska 
-kunna skjuta ned objekt.
+Jag har också fixat så att objekten spawnas in genom att göra en lista med object som är objekten.
+Jag ville göra en animation 
 
 <hr>
 <br>

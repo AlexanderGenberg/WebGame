@@ -1,4 +1,4 @@
-import{s as D,n as c}from"./BF6bCPMk.js";import{S as F,i as J,d as a,b as n,c as p,g as u,e as d,h as o,s as m}from"./D68XkuEI.js";function R(q){let l,g="Storleks kontroll",f,s,y="Pressarna",x,r,H=`Jag har haft mycket problem med att ändra storleken på allt och göra så att pressarna stannar vid en viss
+import{s as D,n as c}from"./COSaXkqD.js";import{S as F,i as J,d as a,b as n,c as p,g as u,e as d,h as o,s as m}from"./CVfcls_3.js";function R(q){let l,g="Storleks kontroll",f,s,y="Pressarna",x,r,H=`Jag har haft mycket problem med att ändra storleken på allt och göra så att pressarna stannar vid en viss
 pungt beroende på höjden av spel rutan. Jag tror att jag först försökte använda mig av styling för att göra
 det men i slutända behövde jag kombinera styling med css och javascript. För att kunna sätta rätt position
 behövde jag veta varifrån spel rutan började och sedan därfrån kunna sätta en viss andel av spelrutan som

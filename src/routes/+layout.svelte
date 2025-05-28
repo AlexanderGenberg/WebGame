@@ -22,19 +22,19 @@
 	storePopup.set({ computePosition, autoUpdate, flip, shift, offset, arrow });
 
 	import { base } from '$app/paths';
-	let highscore = 100
 
 </script>
+
+<head>
+	<title>AKTA DIG!</title>
+</head>
 
 <header>
 	<nav>
 		<a href="{base}/">Hem</a>
-		<a href="{base}/game">Spela</a>
-		<a href="{base}/about">Om oss</a>
 		<a href="{base}/devblog">Devblog</a>
 	</nav>
-	<h1>Samurai på webben</h1>
-	<p>Highscore : {highscore}</p>
+	<h1>AKTA DIG!</h1>
 </header>
 
 <style>
@@ -43,14 +43,15 @@
 		grid-template-columns: repeat(3, 1fr);
 		justify-content: space-around;
 		align-items: center;
-		background-color: burlywood;
+		background-color: lightgreen;
 		height: 64px;
 		border-bottom: black 8px solid;
 		padding: 10px;
+		color: black;
     }
 
 	nav :hover {
-		background-color: black;
+		background-color: white;
 	}
 
 	a {
@@ -60,11 +61,6 @@
 	h1 {
 		display: flex;
 		justify-content: center;
-	}
-
-	p {
-		display: flex;
-		justify-content: flex-end;
 	}
 </style>
 

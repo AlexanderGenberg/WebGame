@@ -1,0 +1,20 @@
+---
+title: "Devblog 4"
+date: "2025-05-28"
+---
+
+# Fortsättning på att spelaren ska ta skada
+
+## Hur det går
+
+Jag har nu försökt med att få in alla siffror och det har gått hyfsat bra men det kan 
+bli bättre struktur och så att det fungerar. Det fungerar dock inte än och jag håller
+på att gå igenom alla variablar för att se vart det inte fungerar som jag vill att det ska.
+
+## Fortsättning
+
+Jag måste verkligen fixa att spelaren tar skada innan jag fortsätter med att spelaren ska 
+kunna skjuta ned objekt.
+
+<hr>
+<br>

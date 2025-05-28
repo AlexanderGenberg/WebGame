@@ -1,18 +1,23 @@
 <script>
 	import { onMount } from "svelte";
+    import {savedScore} from "$lib/highscore";
+    import { base } from "$app/paths";
+
+    // https://www.youtube.com/watch?v=bz4IB-RorZ8 För att få objekten att rotera
 
 
     // bilder
     let pressImage = "assets/press.png"
     let heartImage = "assets/heart.png"
     let backGroundImage = "assets/background3.png"
-    
+
     // varaibles
 
-    let playerImages = []
-    let player = {x:100, vxl:0, vxr:0, speed:4, health:5, states: ["Green", "Yellow", "Orange", "Red"], state: "Green", image: 0}
+    let player = {x:100, vxl:0, vxr:0, speed:7, health:6, states: ["Green", "Yellow", "Orange", "Red"], state: "Green", image: 1}
     let playerSizeX
     let playerY
+    let dmgAvalable = true
+    let playerStrech = false
 
     let presses = [{pressPos: 0, Bottom: 640}, {pressPos: 1, Bottom: 640}, {pressPos: 2, Bottom: 640}]
     let pressIsDown = 1
@@ -22,15 +27,14 @@
     let windowHeight
 
     let startCount = true
-    let countDown = 3
 
-    // create Player image list
-
-    for (let state of player.states) {
-        for (let i = 1; i <= 2; i++) {
-            playerImages.push("assets/player/player" + state + i.toString() + ".png")
-        }
-    }
+    let flyingObjects = []
+    let nextBullet = ["Green", "Orange", "Red"]
+    let bullets = []
+    let shootable = true
+    
+    let poang = 0
+    let gameover = false
 
     // Pleyer Movment
 
@@ -45,6 +49,7 @@
             player.vxl = player.speed
             break
             }
+            case 32: {shoot()}
         }
     }
 
@@ -62,12 +67,12 @@
     }
 
     function updateMovment() {
-        playerSizeX = window.getComputedStyle(document.getElementById("player")).getPropertyValue("width").slice(0, -2)
+        playerSizeX = Number(window.getComputedStyle(document.getElementById("player")).getPropertyValue("width").slice(0, -2))
         playerY = Number(window.getComputedStyle(document.getElementById("player")).getPropertyValue("bottom").slice(0, -2))
         if (player.x <= 0) player.x = 0
         else player.x += player.vxr - player.vxl
 
-        if (player.x > window.innerWidth - 100) player.x = window.innerWidth - 100
+        if (player.x > window.innerWidth - playerSizeX) player.x = window.innerWidth - playerSizeX
         else player.x += player.vxr - player.vxl
 
         requestAnimationFrame(updateMovment)
@@ -77,26 +82,38 @@
 
     function checkIfDamage() {
         for (let press of presses) {
-            let pressSizeX = Number(window.getComputedStyle(document.getElementById("press"+press.pressPos.toString())).getPropertyValue("width").slice(0, -2))
+            let pressX = Number(window.getComputedStyle(document.getElementById("press"+press.pressPos.toString())).getPropertyValue("left").slice(0, -2))
+            let pressWidth = Number(window.getComputedStyle(document.getElementById("press"+press.pressPos.toString())).getPropertyValue("width").slice(0, -2))
             let pressY = Number(window.getComputedStyle(document.getElementById("press"+press.pressPos.toString())).getPropertyValue("bottom").slice(0, -2))
-            console.log(pressY, playerY+Number(playerSizeX))
             if (
-                player.x < press.pressPos*pressSizeX + pressSizeX &&
-                player.x + playerSizeX > press.pressPos*pressSizeX &&
-                playerY + playerSizeX > pressY) {
-                console.log("Dead")
+                player.x + playerSizeX > pressX && 
+                player.x < pressX + pressWidth && 
+                playerY + Number(playerSizeX) >= pressY){
+                takeDmg()
             }
         }
         requestAnimationFrame(checkIfDamage)
     }
 
+    // Player take dmg
 
-    onMount(()=>{updateMovment(); changePress();setInterval(changePress, 2500); checkIfDamage(); })
+    function takeDmg() {
+        if (player.health > 0 && dmgAvalable == true) {
+            dmgAvalable = false
+            playerStrech = true
+            player.health -= 1
+            setTimeout(() => (dmgAvalable = true, playerStrech = false), 2000)
+        }
+
+        else if (player.health == 0) {
+            gameover = true
+        }
+    }
 
     // Player animation
 
     function animatePlayer() {
-        if (player.image==1) player.image = 0
+        if (player.image==1) player.image = 2
         else player.image = 1
     }
 
@@ -119,32 +136,123 @@
         presses = [...presses]
     }
 
+    // Add flying Object
 
-    // Startup
+    function addObject() {
+        if (flyingObjects.length < 10) {
+            let x = Math.round(Math.random()*window.innerWidth)
+            let y = Math.round(Math.random()*backGroundHeight)
+            let z = Math.round(Math.random()*2)
+            let type
 
-    setTimeout(()=> {countDown -= 1; setTimeout(()=> {countDown -= 1; setTimeout(()=> {countDown -= 1; } ,2500/3)} ,2500/3)} ,2500/3)
+            if (x > window.innerWidth - 50*backGroundHeight/762) x -=128
+            if (y < 128) y += 128
+            if (y > backGroundHeight*0.65) y -= 172
+
+            if (z == 0) type ="Green"
+            else if (z == 1) type = "Orange"
+            else type = "Red"
+            let newObject = {type: type, x: x, y: y, moved: false}
+            flyingObjects = [...flyingObjects, newObject]
+        }
+    }
+
+    //Shoot
+
+    function shoot() {
+        if (shootable == true) {
+            shootable = false
+
+            let x = Number(window.getComputedStyle(document.getElementById("player")).getPropertyValue("left").slice(0, -2)) + playerSizeX / 2 - backGroundHeight / 40;
+
+            const bulletId = Date.now()
+            bullets = [...bullets, { id: bulletId, color: nextBullet[0], x: x}]
+            nextBullet.shift()
+
+            player.state = nextBullet[0]
+
+            let z = Math.round(Math.random() * 2)
+            if (z == 0) nextBullet = [...nextBullet, "Green"]
+            else if (z == 1) nextBullet = [...nextBullet, "Orange"]
+            else nextBullet = [...nextBullet, "Red"]
+
+            setTimeout(() => shootable = true, 2000);}
+    }
+
+    // Bullet - Object collision
+    
+    function bulletObjectCollission() {
+        const bulletElements = document.querySelectorAll('.bullet')
+        const objectElements = document.querySelectorAll('.object')
+
+        for (let bulletIndex = bullets.length - 1; bulletIndex >= 0; bulletIndex--) {
+            const bulletEl = bulletElements[bulletIndex]
+            const bulletRect = bulletEl.getBoundingClientRect()
+
+            for (let objectIndex = flyingObjects.length - 1; objectIndex >= 0; objectIndex--) {
+                const objectEl = objectElements[objectIndex]
+                const objectRect = objectEl.getBoundingClientRect()
+
+                if (
+                    bulletRect.left < objectRect.right &&
+                    bulletRect.right > objectRect.left &&
+                    bulletRect.top < objectRect.bottom &&
+                    bulletRect.bottom > objectRect.top &&
+                    bullets[bulletIndex].color === flyingObjects[objectIndex].type && 
+                    gameover == false
+                ) {
+                    poang += 1
+                    bullets.splice(bulletIndex, 1)
+                    flyingObjects.splice(objectIndex, 1)
+                    break
+                }
+            }
+        }
+
+        requestAnimationFrame(bulletObjectCollission);
+    }
+
+    // Setupp
+
+    onMount(()=>{changePress(); setInterval(changePress, 2500); setInterval(() => addObject(),100); checkIfDamage(); updateMovment(); bulletObjectCollission();})
 
 </script>
 
-<p class="countDown" class:hide = {countDown == 0}>{countDown}</p>
-
-<main class:hide = {startCount}>
-    <div>
+<main>
         <div id="presses">
             {#each presses as press}
                 <img src="{pressImage}" alt="press" id="press{press.pressPos}"class="press" class:active = {press.pressPos == pressIsDown} style="bottom:{press.Bottom}px; left:{(press.pressPos/3)*100}%; width:{100/3}vw;">
             {/each}
         </div>
-        <img src="{playerImages[player.image]}" alt="player" id="player" style="left:{player.x}px; bottom:{fromBottom + backGroundHeight/9}px; width:{80*backGroundHeight/762}px; height:{80*backGroundHeight/762}px;">
-    </div>
-    
+        <img src="assets/player/player{player.state + player.image}.png" alt="player" id="player" style="left:{player.x}px; bottom:{fromBottom + backGroundHeight/9}px; width:{80*backGroundHeight/762}px; height:{80*backGroundHeight/762}px;" class:strech = {playerStrech == true}>
+
+        <div>
+            {#each flyingObjects as object}
+                <img src="assets/object/{object.type}Object.png" alt="" class="object" style="left:{object.x}px; top:{object.y}px; width:{48*backGroundHeight/762}px; height:{48*backGroundHeight/762};">
+            {/each}
+        </div>
+
+        <div>
+            {#each bullets as bullet}
+                <div style="width:{backGroundHeight/20}px; height:{backGroundHeight/20}px; left:{bullet.x}px; bottom:{fromBottom + backGroundHeight/9}px; background-color:{bullet.color};" class="bullet" on:animationend={() => bullets = bullets.filter(b => b.id !== bullet.id)}></div>
+            {/each}
+        </div>
+
+        <div id="hearts">
+            {#each Array(player.health) as _}
+                <img src="{heartImage}" alt="health item" class="heart" style="width:{64*backGroundHeight/762}px; height:{64*backGroundHeight/762};">
+            {/each}
+        </div>
+
+        <p id="poang">Poäng: {poang}</p>
+
+        {#if gameover}
+            <div id="gameOver">
+                <p>Du fick {poang} poäng</p>
+                <a href="{base}/" id="gameOverButton">Tillbaka till startsidan</a>
+            </div>
+        {/if}
     <img src="{backGroundImage}" alt="The background" id="backGroundImage">
-    
-    <div id="hearts">
-        {#each Array(player.health) as _}
-            <img src="{heartImage}" alt="health item" class="heart" style="width:{64*backGroundHeight/762}px; height:64*{backGroundHeight/762};">
-        {/each}
-    </div>
 </main>
 
 <svelte:window on:keydown={onKeyDown} on:keyup={onKeyUp}/>
@@ -159,7 +267,7 @@
 
     .press {
         z-index: -1;
-        transition: 1000ms bottom linear;
+        transition: 900ms bottom linear;
         position: absolute;
     }
 
@@ -169,7 +277,7 @@
     }
 
     .active {
-        transition: 1500ms bottom linear;
+        transition: 900ms bottom linear;
     }
 
     #hearts {
@@ -189,18 +297,67 @@
         position: fixed;
         z-index: -2;
     }
-    
-    .hide {
-        opacity: 0;
+
+    .object {
+        position: fixed;
+        animation: spinning 900ms linear infinite;
+        z-index: -1;
     }
 
-    .countDown {
-        position:absolute;
+    @keyframes spinning {
+        from{transform:rotate(0deg);}
+        to{transform:rotate(360deg);}
+    }
+
+    .bullet {
+        position: absolute;
+        animation: moveUp 1500ms linear forwards;
+        border: 4px black solid;
+        z-index: -1;
+    }
+
+    @keyframes moveUp {
+        to {bottom: 200vh;}
     }
 
     @media (max-width: 768px) {
         main {
             display: none;
         }
+    }
+
+    #poang {
+        position: absolute;
+        top: 48px; /* Centrera vertikalt */
+        left: 50%; /* Centrera horisontellt */
+        transform: translate(-50%, 0px); /* Justera för att flytta elementets mittpunkt till mitten */
+        color: black;
+        font-size: 2em;
+        background-color: lightgreen;
+        padding: 10px;
+        z-index: 1;
+        text-align: center; /* Centrera texten */
+        border: 4px black solid;
+    }
+
+    #gameOver {
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background-color: lightgreen;
+        padding: 20px;
+        border: 2px solid black;
+        text-align: center;
+        z-index: 10;
+        color: black;
+    }
+
+    #gameOverButton {
+        border: 2px solid black;
+    }
+
+    #gameOverButton:hover {
+        box-shadow: 0 0 10px black;
     }
 </style>
